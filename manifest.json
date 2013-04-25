@@ -1,12 +1,12 @@
 {
   "name": "Redeem the Time",
-  "description": "Stay focused by taking the Lord's grace as your supply",
+  "description": "Stay focused by taking God's grace as your supply",
   "version": "1.0",
   "manifest_version": 2,
   "permissions": ["tabs"],
 
   "background": {
-    "scripts": ["background.js"],
+    "scripts": ["assets/js/background.js"],
     "persistent": true
   }, 
 
