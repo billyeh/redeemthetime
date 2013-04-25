@@ -1,50 +1,33 @@
-// Copyright (c) 2012 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+$(document).ready(function() {
+  generateRandom();
+});
 
-document.body.innerHTML = "";
-
-function addButton(name, cb) {
-  var a = document.createElement("button");
-  a.innerText = name;
-  a.onclick = cb;
-  document.body.appendChild(document.createElement("br"));
-  document.body.appendChild(a);
+function generateRandom() {
+  // Random generator
+  var rand = Math.floor(Math.random() * 4);
+  if (rand == 0) {
+    getHymn();
+  } else if (rand == 1) {
+    getVerse();
+  } else if (rand == 2) {
+    getRadio();
+  } else {
+    getActivity();
+  }
 }
 
-function log(str) {
-  console.log(str);
-  logDiv.innerHTML += str + "<br>";
+function getHymn() {
+  alert("getting hymn");
 }
 
-addButton("Clear logs", function() {
-  logDiv.innerHTML = "";
-});
+function getVerse() {
+  alert("getting verse");
+}
 
-addButton("Send message with delayed response", function() {
-  chrome.runtime.sendMessage({delayedResponse: true}, function(response) {
-    log("Background page responded: " + response);
-  });
-});
+function getRadio() {
+  alert("getting radio");
+}
 
-addButton("Show counters", function() {
-  chrome.runtime.sendMessage({getCounters: true}, function(response) {
-    log("In-memory counter is: " + response.counter);
-    log("Persisted counter is: " + response.persistentCounter);
-  });
-});
-
-addButton("Set an alarm", function() {
-  chrome.runtime.sendMessage({setAlarm: true});
-});
-
-chrome.runtime.onMessage.addListener(function(msg, _, sendResponse) {
-  log("Got message from background page: " + msg);
-});
-
-var logDiv = document.createElement("div");
-logDiv.style.border = "1px dashed black";
-document.body.appendChild(document.createElement("br"));
-document.body.appendChild(logDiv);
-
-log("Ready.");
+function getActivity() {
+  alert("getting activity");
+}
