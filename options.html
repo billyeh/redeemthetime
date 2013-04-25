@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>RedeemTheTime Options</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Set your blocked sites to redeem time from">
+    <meta name="author" content="Bill Yeh">
+
+    <!-- Le styles -->
+    <link href="../assets/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="#">Redeem</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="#">Options</a></li>
+              <li><a href="#about">About</a></li>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h1>Redeem Your Time</h1>
+      <div class="row">
+        <div class="span6">
+          <div class="inline-heading">
+            <h4>Block sites</h4>
+            <p style="color:grey">e.g. facebook, reddit.com, youtube, one per line</p>
+          </div>
+          <form method="post" action="">
+            <textarea class="input-xxlarge" rows="15" id="add-sites"></textarea><br>
+            <a class="btn btn-primary btn-medium" id="add-site">
+              Add
+            </a>
+          </form>
+        </div>
+
+        <div class="span6">
+          <h4>Currently blocked sites</h4>
+          <form action="">
+            <select multiple class="input-xxlarge" size="18" id="blocked-sites">
+            </select>
+            <a class="btn btn-primary btn-medium" id="remove-site">
+              Remove
+            </a>
+          </form>
+        </div>
+      </div>
+      <hr>
+
+      <footer>
+        <p>&copy; RedeemTheTime 2013</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../assets/js/jquery-1.9.1.min.js"></script>
+    <script src="options.js" type="text/javascript"></script>
+
+  </body>
+</html>
