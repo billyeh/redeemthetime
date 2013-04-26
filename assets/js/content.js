@@ -49,7 +49,15 @@ function getRadio() {
       .attr("id", "audio"));
     $("#audio")
       .append($("<source></source>")
-      .attr("src", mp3));
+      .attr({src: mp3, id: "radio"}));
+    $("audio")
+      .after($("<p></p>")
+      .text("Radio Broadcast on " + formatBook(book) + " from ")
+      .attr({style: "font-style:italic; float: right", id: "credit"}));
+    $("#credit")
+      .append($("<a></a>")
+      .text("LSM")
+      .attr("href", localStorage["radio"]));
   });
 }
 
@@ -72,5 +80,35 @@ function randInt(max) {
 }
 
 function endsWith(str, suffix) {
-    return str.indexOf(suffix, str.length - suffix.length) !== -1;
+  return str.indexOf(suffix, str.length - suffix.length) !== -1;
+}
+
+function formatBook(string) {
+  if (string.indexOf("samuel") > 0) {
+    return string.charAt(0) + " Samuel";
+  } else if (string.indexOf("minor") > 0) {
+    return "Minor Prophets";
+  } else if (string.indexOf("corinthians") > 0) {
+    return string.charAt(0) + " Corinthians";
+  } else if (string.indexOf("kings") > 0) {
+    return string.charAt(0) + " Kings";
+  } else if (string.indexOf("thesselonians") > 0) {
+    return "1 and 2 Thesselonians";
+  } else if (string.indexOf("timothy") > 0) {
+    return "1 and 2 Timothy";
+  } else if (string.indexOf("peter") > 0) {
+    return "1 and 2 Peter";
+  } else if (string.indexOf("john") > 0) {
+    return "1, 2 and 3 John";
+  }
+  return capitalizeFirstLetter(removeNumbers(string));
+}
+
+function capitalizeFirstLetter(string)
+{
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function removeNumbers(string) {
+  return string.replace(/[0-9]/g, '');
 }
