@@ -18,8 +18,8 @@ $(document).ready(function() {
   // Remove a site from being blocked
   $("#remove-site").click(function() {
     var unselected = [];
-    $("#blocked-sites option").not(':selected').each(function () {
-      selected.push($(this).text());
+    $("option").not(':selected').each(function () {
+      unselected.push($(this).text());
     });
     $("option:selected").remove();
     localStorage["blocked"] = JSON.stringify(unselected);
