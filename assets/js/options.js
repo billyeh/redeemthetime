@@ -21,8 +21,8 @@ $(document).ready(function() {
     $("#blocked-sites option").not(':selected').each(function () {
       selected.push($(this).text());
     });
+    $("option:selected").remove();
     localStorage["blocked"] = JSON.stringify(unselected);
-    $("#blocked-sites option:selected").remove();
   });
 
   // Add page to blocked sites list
