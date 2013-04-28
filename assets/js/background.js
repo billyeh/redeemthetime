@@ -28,5 +28,7 @@ chrome.runtime.onInstalled.addListener(function (details) {
     }
     localStorage["bible_books"] = JSON.stringify(bible_books);
   });
+
+  localStorage["verses"] = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20content%20FROM%20html%20WHERE%20url%3D%22http%3A%2F%2Fonline.recoveryversion.org%2FBibleChapters.asp%3Ffcid%3DZZ%26lcid%3DZZ%22%20AND%20xpath%3D%22%2Fhtml%2Fbody%2Fdiv%5B%40id%3D'container'%5D%2Fdiv%5B%40id%3D'content'%5D%2Fp%5B%40class%3D'verses'%5D%22&format=json&diagnostics=true"
   
 });

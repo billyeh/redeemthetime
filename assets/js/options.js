@@ -12,6 +12,7 @@ $(document).ready(function() {
     }
     localStorage["blocked"] = JSON.stringify(current);
     $("#add-sites").val('');
+    $("option").remove();
     loadSites();
   });
 

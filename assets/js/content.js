@@ -26,6 +26,9 @@ function getVerse() {
   $("#title")
     .after($("<h3></h3>")
     .text("Try praying and reading over this verse."));
+  $.getJSON(localStorage["verses"].replace("ZZ", "11"), function(data) {
+    alert(data.query);
+  });
 }
 
 function getRadio() {
@@ -57,7 +60,7 @@ function getRadio() {
     $("#credit")
       .append($("<a></a>")
       .text("LSM")
-      .attr("href", localStorage["radio"]));
+      .attr({href: "http://www.lsmradio.com/rad_archives.html", target: "_blank"}));
   });
 }
 
@@ -84,21 +87,21 @@ function endsWith(str, suffix) {
 }
 
 function formatBook(string) {
-  if (string.indexOf("samuel") > 0) {
+  if (string.indexOf("samuel") >= 0) {
     return string.charAt(0) + " Samuel";
-  } else if (string.indexOf("minor") > 0) {
+  } else if (string.indexOf("minor") >= 0) {
     return "Minor Prophets";
-  } else if (string.indexOf("corinthians") > 0) {
+  } else if (string.indexOf("corinthians") >= 0) {
     return string.charAt(0) + " Corinthians";
-  } else if (string.indexOf("kings") > 0) {
+  } else if (string.indexOf("kings") >= 0) {
     return string.charAt(0) + " Kings";
-  } else if (string.indexOf("thesselonians") > 0) {
+  } else if (string.indexOf("thessalonians") >= 0) {
     return "1 and 2 Thesselonians";
-  } else if (string.indexOf("timothy") > 0) {
+  } else if (string.indexOf("timothy") >= 0) {
     return "1 and 2 Timothy";
-  } else if (string.indexOf("peter") > 0) {
+  } else if (string.indexOf("peter") >= 0) {
     return "1 and 2 Peter";
-  } else if (string.indexOf("john") > 0) {
+  } else if (string.indexOf("john") >= 0) {
     return "1, 2 and 3 John";
   }
   return capitalizeFirstLetter(removeNumbers(string));
