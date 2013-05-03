@@ -6,7 +6,7 @@ function generateRandomContent() {
   // Random generator;
   var rand = randInt(4);
   if (rand == 0) {
-    getHymn();
+    getHymn(true);
   } else if (rand == 1) {
     getVerse();
   } else if (rand == 2) {
@@ -16,11 +16,13 @@ function generateRandomContent() {
   }
 }
 
-function getHymn() {
-  $("#title")
-    .after($("<h3></h3>")
-    .text("Enjoy a hymn!"));
-
+function getHymn(firstTime) {
+  var realHymn = true;
+  if (firstTime) {
+    $("#title")
+      .after('<h3>Enjoy a hymn! &nbsp;&nbsp;</h3>');
+  }
+  localStorage["playing"] = 'false';
   var randomType = randInt(384 + 87 + 1360 + 164);
   var type;
   var number;
@@ -38,6 +40,51 @@ function getHymn() {
     number = randInt(163) + 1;
   }
 
+  $("h3").after('<ol id="lyrics"></ol>');
+
+  var hymn_query = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20html%20WHERE%20url%3D%22http%3A%2F%2Fhymn.aws.af.cm%2Fhymn%3Fhymn%3DYY%26type%3DZZ%22&format=json&diagnostics=true";
+  $.getJSON(hymn_query.replace("YY", number).replace("ZZ", type), function(data) {
+    try {
+      var lyrics = JSON.parse(data.query.results.body.p);
+    } catch(err) {
+      alert("Error");
+      getHymn(false);
+      realHymn = false;
+    }
+    if (realHymn) {
+      var formattedLyrics = [];
+      for (var i = 0; i < lyrics.length; i++) {
+        formattedLyrics.push(replaceAll("\n", "<br />", lyrics[i]));
+      }
+      for (var i = 0; i < lyrics.length; i++) {
+        if (formattedLyrics[i].indexOf("chorus") == 0) {
+          var chorus = '<dl><dd>' + formattedLyrics[i].slice(lyrics[i].indexOf(" ")) + "<dd></dl>";
+          $("#lyrics").append(chorus);
+        } else {
+          $("#lyrics").append("<li>" + formattedLyrics[i].slice(lyrics[i].indexOf(" ")) + "</li>");
+        }
+      }
+      var mp3_query = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20href%20FROM%20html%20WHERE%20url%3D%22http%3A%2F%2Fwww.hymnal.net%2Fhymn.php%2F" + type + "%2F" + number + "%22%20AND%20xpath%3D%22%2Fhtml%2Fbody%5B%40class%3D'home'%5D%2Fdiv%5B%40id%3D'pagewrap'%5D%2Fdiv%5B%40id%3D'body'%5D%2Fdiv%5B%40id%3D'layout'%5D%2Fdiv%5B%40id%3D'sidebar'%5D%2Fdiv%5B%40class%3D'widgetwrap'%5D%5B4%5D%2Fdiv%5B%40class%3D'widget%20downloads'%5D%2Ful%5B%40class%3D'list'%5D%2Fli%5B2%5D%2Fa%5B1%5D%22&format=json&diagnostics=true";
+      $.getJSON(mp3_query, function(data) {
+        $("h3")
+            .append('<div class="play_border"><div class="play_button"></div></div>');
+        $("h3")
+            .append('<audio id="audio"></audio>');
+        $("#audio")
+            .append('<source src="' + data.query.results.a.href + '"></source>');
+        $("div.play_border").on('click', function() {
+          if (localStorage["playing"] == 'false') {
+            $("#audio").trigger("play");
+            localStorage["playing"] == 'true';
+          }
+        });
+        $("ol")
+            .after($('<a></a>')
+            .text("Hymn from Hymnal.Net")
+            .attr({href: "http://www.hymnal.net/hymn.php/h/60"}));
+      });
+    }
+  });
 }
 
 function getVerse() {
@@ -54,7 +101,7 @@ function getVerse() {
       verses.push(data.query.results.p[i]);
     }
     var chosen = [];
-    var firstVerse = randInt(verses.length - 5);
+    var firstVerse = Math.abs(randInt(verses.length - 5)) ;
     for (var i = firstVerse; i < randInt(3) + 2 + firstVerse; i++) {
       chosen.push(verses[i]);
     }
@@ -64,7 +111,7 @@ function getVerse() {
         .attr({start: (firstVerse + 1).toString(), id: "verses"}));
     for (var i = 0; i < chosen.length; i++) {
       $("#verses")
-          .append('<li><i>' + chosen[i] + '</i></li>');
+          .append('<li>' + chosen[i] + '</li>');
     }
 
   });
@@ -74,15 +121,15 @@ function getVerse() {
   $.getJSON(book_query, function(data) {
     var book = data.query.results.h1;
     for (var i = 0; i < books.length; i++) {
-      if (book.toLowerCase().indexOf(books[i].toLowerCase()) >= 0) {
+      if (book.toLowerCase().indexOf(removeNumbers(books[i].toLowerCase())) >= 0) {
         book = (books[i]);
       }
     }
     $.getJSON(chapter_query, function(data) {
       $("#verses")
-          .after($('<p></p>')
+          .after($('<a></a>')
               .text(book + ' ' + data.query.results.h4.content.split(' ')[1])
-              .attr("style", "float: right"));
+              .attr({style: "float: right", href: "http://online.recoveryversion.org/BibleChapters.asp?fcid=34&lcid=34".replace("34", chapter).replace("34", chapter)}));
     });
   });
 
@@ -91,7 +138,7 @@ function getVerse() {
 function getRadio() {
   $("#title")
     .after($("<h3></h3>")
-    .text("Listen to a radio broadcast of a message instead.")
+    .text("Listen to a radio broadcast of a message.")
     .attr("id", "instructions"));
   var books = JSON.parse(localStorage["bible_books"]);
   var book = books[randInt(books.length)];
@@ -113,7 +160,7 @@ function getRadio() {
     $("audio")
       .after($("<p></p>")
       .text("Radio Broadcast on " + formatBook(book) + " from ")
-      .attr({style: "font-style:italic; float: right", id: "credit"}));
+      .attr({style: "float: right", id: "credit"}));
     $("#credit")
       .append($("<a></a>")
       .text("LSM")
@@ -171,4 +218,11 @@ function capitalizeFirstLetter(string)
 
 function removeNumbers(string) {
   return string.replace(/[0-9]/g, '');
+}
+
+function replaceAll(oldCharacter, newCharacter, string) {
+  while (string.indexOf(oldCharacter) >= 0) {
+    string = string.replace(oldCharacter, newCharacter);
+  }
+  return string;
 }
