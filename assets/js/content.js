@@ -102,7 +102,7 @@ function getVerse() {
     }
     var chosen = [];
     var firstVerse = Math.abs(randInt(verses.length - 5)) ;
-    for (var i = firstVerse; i < randInt(3) + 2 + firstVerse; i++) {
+    for (var i = firstVerse; i < randInt(3) + 2 + Math.abs(firstVerse); i++) {
       chosen.push(verses[i]);
     }
 
