@@ -39,6 +39,12 @@ $(document).ready(function() {
   $("#open-options").click(function() {
     chrome.tabs.create({"url": "../options.html"});
   });
+
+  // Clear all blocked sites
+  $("#clear-all").click(function() {
+    localStorage["blocked"] = JSON.stringify([]);
+    $("option").selected.remove();
+  });
   
 });
 

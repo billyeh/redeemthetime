@@ -20,15 +20,72 @@ function getHymn() {
   $("#title")
     .after($("<h3></h3>")
     .text("Enjoy a hymn!"));
+
+  var randomType = randInt(384 + 87 + 1360 + 164);
+  var type;
+  var number;
+  if (randomType <= 384) {
+    type = 'ns';
+    number = randInt(383) + 1;
+  } else if (randomType <= 384 + 1360) {
+    type = 'h';
+    number = randInt(1359) + 1;
+  } else if (randomType <= 384 + 1360 + 87) {
+    type = 'lb';
+    number = randInt(86) + 1;
+  } else {
+    type = 'c';
+    number = randInt(163) + 1;
+  }
+
 }
 
 function getVerse() {
   $("#title")
     .after($("<h3></h3>")
-    .text("Try praying and reading over this verse."));
-  $.getJSON(localStorage["verses"].replace("ZZ", "11"), function(data) {
-    alert(data.query);
+    .text("Try praying and reading over these verses.")
+    .attr("id", "instructions"));
+  
+  var chapter = randInt(1188) + 1;
+  var verses = [];
+  $.getJSON(localStorage["verses"].replace("ZZ", chapter.toString()).replace("ZZ", chapter.toString()), function(data) {
+
+    for (var i = 0; i < data.query.results.p.length; i++) {
+      verses.push(data.query.results.p[i]);
+    }
+    var chosen = [];
+    var firstVerse = randInt(verses.length - 5);
+    for (var i = firstVerse; i < randInt(3) + 2 + firstVerse; i++) {
+      chosen.push(verses[i]);
+    }
+
+    $("#instructions")
+        .after($("<ol></ol>")
+        .attr({start: (firstVerse + 1).toString(), id: "verses"}));
+    for (var i = 0; i < chosen.length; i++) {
+      $("#verses")
+          .append('<li><i>' + chosen[i] + '</i></li>');
+    }
+
   });
+  var book_query = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20content%20FROM%20html%20WHERE%20url%3D%22http%3A%2F%2Fonline.recoveryversion.org%2FBibleChapters.asp%3Ffcid%3DZZ%26lcid%3DZZ%22%20AND%20xpath%3D%22%2Fhtml%2Fbody%2Fdiv%5B%40id%3D'container'%5D%2Fdiv%5B%40id%3D'content'%5D%2Fh1%5B%40class%3D'book'%5D%22&format=json&diagnostics=true".replace("ZZ", chapter.toString()).replace("ZZ", chapter.toString());
+  var books = JSON.parse(localStorage["books"]);
+  var chapter_query = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20html%20WHERE%20url%3D%22http%3A%2F%2Fonline.recoveryversion.org%2FBibleChapters.asp%3Ffcid%3DZZ%26lcid%3DZZ%22%20AND%20xpath%3D%22%2Fhtml%2Fbody%2Fdiv%5B%40id%3D'container'%5D%2Fdiv%5B%40id%3D'content'%5D%2Fh4%5B%40class%3D'chapter'%5D%22&format=json&diagnostics=true".replace("ZZ", chapter.toString()).replace("ZZ", chapter.toString());
+  $.getJSON(book_query, function(data) {
+    var book = data.query.results.h1;
+    for (var i = 0; i < books.length; i++) {
+      if (book.toLowerCase().indexOf(books[i].toLowerCase()) >= 0) {
+        book = (books[i]);
+      }
+    }
+    $.getJSON(chapter_query, function(data) {
+      $("#verses")
+          .after($('<p></p>')
+              .text(book + ' ' + data.query.results.h4.content.split(' ')[1])
+              .attr("style", "float: right"));
+    });
+  });
+
 }
 
 function getRadio() {
@@ -36,17 +93,17 @@ function getRadio() {
     .after($("<h3></h3>")
     .text("Listen to a radio broadcast of a message instead.")
     .attr("id", "instructions"));
-  books = JSON.parse(localStorage["bible_books"]);
-  book = books[randInt(books.length)];
-  radio_query = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20html%20WHERE%20url%3D%22http%3A%2F%2Fwww.lsmradio.com%2Faudio%2Fgenesis.html%22%20and%20xpath%3D%22%2F%2Fa%22&format=json&diagnostics=true"
-  mp3s = [];
+  var books = JSON.parse(localStorage["bible_books"]);
+  var book = books[randInt(books.length)];
+  var radio_query = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20html%20WHERE%20url%3D%22http%3A%2F%2Fwww.lsmradio.com%2Faudio%2Fgenesis.html%22%20and%20xpath%3D%22%2F%2Fa%22&format=json&diagnostics=true"
+  var mp3s = [];
   $.getJSON(radio_query, function(data) {
     for (var i = 0; i < data.query.results.a.length; i++) {
       if (endsWith(data.query.results.a[i].href, '.mp3')) {
         mp3s.push(data.query.results.a[i].href);
       }
     }
-    mp3 = mp3s[randInt(mp3s.length)];
+    var mp3 = mp3s[randInt(mp3s.length)];
     $("#instructions")
       .after($("<audio controls></audio>")
       .attr("id", "audio"));
