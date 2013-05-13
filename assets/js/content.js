@@ -10,16 +10,35 @@ $(document).ready(function() {
 function fillModal() {
   var chapter = randInt(1188) + 1;
   var verses = [];
+  var rand;
   $.getJSON(localStorage["verses"].replace("ZZ", chapter.toString()).replace("ZZ", chapter.toString()), function(data) {
     for (var i = 0; i < data.query.results.p.length; i++) {
       verses.push(data.query.results.p[i]);
     }
-    alert(verses);
-    var chosenVerse = verses[randInt(verses.length)];
+    rand = randInt(verses.length);
+    var chosenVerse = verses[rand];
     $("#modal-instructions")
         .after($('<p></p>')
         .text(chosenVerse)
         .attr("id", "modal-verse"));
+  });
+
+  var book_query = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20content%20FROM%20html%20WHERE%20url%3D%22http%3A%2F%2Fonline.recoveryversion.org%2FBibleChapters.asp%3Ffcid%3DZZ%26lcid%3DZZ%22%20AND%20xpath%3D%22%2Fhtml%2Fbody%2Fdiv%5B%40id%3D'container'%5D%2Fdiv%5B%40id%3D'content'%5D%2Fh1%5B%40class%3D'book'%5D%22&format=json&diagnostics=true".replace("ZZ", chapter.toString()).replace("ZZ", chapter.toString());
+  var books = JSON.parse(localStorage["books"]);
+  var chapter_query = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20html%20WHERE%20url%3D%22http%3A%2F%2Fonline.recoveryversion.org%2FBibleChapters.asp%3Ffcid%3DZZ%26lcid%3DZZ%22%20AND%20xpath%3D%22%2Fhtml%2Fbody%2Fdiv%5B%40id%3D'container'%5D%2Fdiv%5B%40id%3D'content'%5D%2Fh4%5B%40class%3D'chapter'%5D%22&format=json&diagnostics=true".replace("ZZ", chapter.toString()).replace("ZZ", chapter.toString());
+  $.getJSON(book_query, function(data) {
+    var book = data.query.results.h1;
+    for (var i = 0; i < books.length; i++) {
+      if (book.toLowerCase().indexOf(removeNumbers(books[i].toLowerCase())) >= 0) {
+        book = (books[i]);
+      }
+    }
+    $.getJSON(chapter_query, function(data) {
+      $("#modal-verse")
+          .after($('<p></p>')
+              .text(book + ' ' + data.query.results.h4.content.split(' ')[1] + ":" + rand)
+              .attr({style: "float: right", href: "http://online.recoveryversion.org/BibleChapters.asp?fcid=34&lcid=34".replace("34", chapter).replace("34", chapter)}));
+    });
   });
 }
 
