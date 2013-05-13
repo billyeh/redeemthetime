@@ -1,6 +1,27 @@
 $(document).ready(function() {
   generateRandomContent();
+  fillModal();
+
+  $('#modal-verse-type').bind('paste', function(event) {
+    event.preventDefault();
+  });
 });
+
+function fillModal() {
+  var chapter = randInt(1188) + 1;
+  var verses = [];
+  $.getJSON(localStorage["verses"].replace("ZZ", chapter.toString()).replace("ZZ", chapter.toString()), function(data) {
+    for (var i = 0; i < data.query.results.p.length; i++) {
+      verses.push(data.query.results.p[i]);
+    }
+    alert(verses);
+    var chosenVerse = verses[randInt(verses.length)];
+    $("#modal-instructions")
+        .after($('<p></p>')
+        .text(chosenVerse)
+        .attr("id", "modal-verse"));
+  });
+}
 
 function generateRandomContent() {
   // Random generator;
@@ -47,7 +68,6 @@ function getHymn(firstTime) {
     try {
       var lyrics = JSON.parse(data.query.results.body.p);
     } catch(err) {
-      alert("Error");
       getHymn(false);
       realHymn = false;
     }
@@ -81,7 +101,7 @@ function getHymn(firstTime) {
         $("ol")
             .after($('<a></a>')
             .text("Hymn from Hymnal.Net")
-            .attr({href: "http://www.hymnal.net/hymn.php/h/60"}));
+            .attr({href: "http://www.hymnal.net/hymn.php/h/" + number}));
       });
     }
   });
@@ -101,7 +121,7 @@ function getVerse() {
       verses.push(data.query.results.p[i]);
     }
     var chosen = [];
-    var firstVerse = Math.abs(randInt(verses.length - 5)) ;
+    var firstVerse = Math.abs(randInt(verses.length - 5));
     for (var i = firstVerse; i < randInt(3) + 2 + Math.abs(firstVerse); i++) {
       chosen.push(verses[i]);
     }
