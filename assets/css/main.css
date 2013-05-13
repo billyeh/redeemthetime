@@ -2,7 +2,7 @@ body {
   padding-top: 60px;
   padding-bottom: 40px;
 }
-.inline-heading h4, .inline-heading p {
+.inline-heading h4, .inline-heading p, .inline-heading h2 {
   display: inline-block;
 }
 
