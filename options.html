@@ -27,15 +27,33 @@
           <div class="nav-collapse collapse">
             <ul class="nav">
               <li class="active"><a href="#">Options</a></li>
-              <li><a href="#about">About</a></li>
+              <li><a href="#about" data-toggle="modal">About</a></li>
           </div><!--/.nav-collapse -->
         </div>
       </div>
     </div>
 
     <div class="container">
-      <h1>Redeem Your Time</h1>
+      
+      <!-- About Modal -->
+      <div id="about" class="modal hide fade in" tabindex="-2" keyboard-data="true">  
+        <div class="modal-header">
+          <a class="close" data-dismiss="modal">×</a>  
+          <h2>About</h2>
+        </div>  
+        <div class="modal-body">
+          <p>Sometimes it's nice to be able to turn back to the Lord whenever we visit some sites.
+          Click Redeem at the top left of any page on this app to find something to enjoy.</p>
+        </div>
+        <div class="modal-footer">
+          <p>&copy; RedeemTheTime 2013</p>
+        </div>  
+      </div>
+      
+      <h1>Redeem the Time</h1>
       <div class="row">
+        
+        <!-- Add sites -->
         <div class="span6">
           <div class="inline-heading">
             <h4>Block sites</h4>
@@ -49,10 +67,11 @@
           </form>
         </div>
 
+        <!-- Remove sites -->
         <div class="span6">
           <div class="inline-heading">
-            <h4>Currently blocked sites</h4>
-            <p style="color:grey">drag or hold down Ctrl to select multiple&nbsp;&nbsp;<a href="" id="clear-all" class="m-btn green mini rnd">Clear all</a></p>
+            <h4>Blocked sites</h4>
+            <p style="color:grey">click remove or press delete&nbsp;&nbsp;&nbsp;<a href="" id="clear-all" class="m-btn green mini rnd">Clear all</a></p>
           </div>
           <form action="">
             <select multiple class="input-xxlarge" size="18" id="blocked-sites">
@@ -75,6 +94,7 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="../assets/js/jquery-1.9.1.min.js"></script>
+    <script src="../assets/js/bootstrap.min.js"></script>
     <script src="../assets/js/options.js" type="text/javascript"></script>
 
   </body>

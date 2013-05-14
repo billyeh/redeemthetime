@@ -17,14 +17,22 @@ $(document).ready(function() {
   });
 
   // Remove a site from being blocked
+  $('html').keyup(function(e) {
+    if (e.keyCode == 46) {
+      removeSites();
+    }
+  });
   $("#remove-site").click(function() {
+    removeSites();
+  });
+  function removeSites() {
     var unselected = [];
     $("option").not(':selected').each(function () {
       unselected.push($(this).text());
     });
     $("option:selected").remove();
     localStorage["blocked"] = JSON.stringify(unselected);
-  });
+  }
 
   // Add page to blocked sites list
   $("#block-page").click(function() {
