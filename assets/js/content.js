@@ -2,9 +2,9 @@ $(document).ready(function() {
   generateRandomContent();
   fillModal();
 
-  /*$('#modal-verse-type').bind('paste', function(event) {
+  $('#modal-verse-type').bind('paste', function(event) {
     event.preventDefault();
-  });*/
+  });
 
 });
 
@@ -25,7 +25,8 @@ function fillModal() {
     $("#modal-check").click(function() {
       var typed = $("#modal-verse-type").val();
       if (chosenVerse.slice(1) === typed) {
-        //redirect
+        localStorage["test_passed"] = "true";
+        chrome.tabs.update({"url": localStorage["blocked_page"]});
       }
     });
   });

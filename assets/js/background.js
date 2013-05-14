@@ -8,7 +8,14 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   blocked_sites = JSON.parse(localStorage["blocked"]);
   for (var i = 0; i < blocked_sites.length; i++) {
     if (tab.url.indexOf(blocked_sites[i]) >= 0) {
-      chrome.tabs.update(tab.id, {"url": "content.html"});
+      if (localStorage["test_passed"] === "true" && changeInfo.status === "complete") {
+        localStorage["test_passed"] = "false";
+      } else if (localStorage["test_passed"] === "true" && changeInfo.status != "complete") {
+        // Do nothing
+      } else {
+        chrome.tabs.update(tab.id, {"url": "content.html"});
+        localStorage["blocked_page"] = changeInfo.url;
+      }
     }
   }
 });
@@ -36,4 +43,6 @@ chrome.runtime.onInstalled.addListener(function (details) {
     }
     localStorage["books"] = JSON.stringify(books);
   });
+
+  localStorage["test_passed"] = "false";
 });
