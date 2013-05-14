@@ -1,7 +1,9 @@
 body {
   padding-top: 60px;
   padding-bottom: 40px;
+  background-image:url('/assets/img/debut_light.png');
 }
+
 .inline-heading h4, .inline-heading p, .inline-heading h2 {
   display: inline-block;
 }
