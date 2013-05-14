@@ -2,9 +2,10 @@ $(document).ready(function() {
   generateRandomContent();
   fillModal();
 
-  $('#modal-verse-type').bind('paste', function(event) {
+  /*$('#modal-verse-type').bind('paste', function(event) {
     event.preventDefault();
-  });
+  });*/
+
 });
 
 function fillModal() {
@@ -21,6 +22,12 @@ function fillModal() {
         .after($('<p></p>')
         .text(chosenVerse)
         .attr("id", "modal-verse"));
+    $("#modal-check").click(function() {
+      var typed = $("#modal-verse-type").val();
+      if (chosenVerse.slice(1) === typed) {
+        //redirect
+      }
+    });
   });
 
   var book_query = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20content%20FROM%20html%20WHERE%20url%3D%22http%3A%2F%2Fonline.recoveryversion.org%2FBibleChapters.asp%3Ffcid%3DZZ%26lcid%3DZZ%22%20AND%20xpath%3D%22%2Fhtml%2Fbody%2Fdiv%5B%40id%3D'container'%5D%2Fdiv%5B%40id%3D'content'%5D%2Fh1%5B%40class%3D'book'%5D%22&format=json&diagnostics=true".replace("ZZ", chapter.toString()).replace("ZZ", chapter.toString());
@@ -40,6 +47,7 @@ function fillModal() {
               .attr({style: "float: right", href: "http://online.recoveryversion.org/BibleChapters.asp?fcid=34&lcid=34".replace("34", chapter).replace("34", chapter)}));
     });
   });
+
 }
 
 function generateRandomContent() {
