@@ -9,8 +9,9 @@
 
     <!-- Le styles -->
     <link href="../assets/css/bootstrap.css" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/main.css">
+    <link href="../assets/css/main.css" rel="stylesheet">
     <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="../assets/microsoft/css/m-styles.min.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -42,7 +43,7 @@
           </div>
           <form method="post" action="">
             <textarea class="input-xxlarge" rows="15" id="add-sites"></textarea><br>
-            <a class="btn btn-primary btn-medium" id="add-site">
+            <a class="m-btn blue rnd" id="add-site">
               Add
             </a>
           </form>
@@ -51,12 +52,12 @@
         <div class="span6">
           <div class="inline-heading">
             <h4>Currently blocked sites</h4>
-            <p style="color:grey">drag or hold down Ctrl to select multiple&nbsp;&nbsp;&nbsp;&nbsp;<a href="" id="clear-all">Clear all</a></p>
+            <p style="color:grey">drag or hold down Ctrl to select multiple&nbsp;&nbsp;<a href="" id="clear-all" class="m-btn green mini rnd">Clear all</a></p>
           </div>
           <form action="">
             <select multiple class="input-xxlarge" size="18" id="blocked-sites">
             </select>
-            <a class="btn btn-primary btn-medium" id="remove-site">
+            <a class="m-btn blue rnd" id="remove-site">
               Remove
             </a>
           </form>
