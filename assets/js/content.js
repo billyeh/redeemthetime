@@ -22,12 +22,17 @@ function fillModal() {
         .after($('<p></p>')
         .text(chosenVerse)
         .attr("id", "modal-verse"));
+    var content;
     $("#modal-check").click(function() {
       var typed = $("#modal-verse-type").val();
       if (chosenVerse.slice(1) === typed) {
         localStorage["test_passed"] = "true";
         chrome.tabs.update({"url": localStorage["blocked_page"]});
+        content = "Good job!";
+      } else {
+        content = "Nice try";
       }
+      $('#modal-check').popover({"content": content, "placement": "left"}).show();
     });
   });
 
